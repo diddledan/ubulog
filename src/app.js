@@ -9,7 +9,7 @@ const config = require('config');
 //mongoose.Promise = require('bluebird');
 const elasticsearch = require('elasticsearch');
 
-const es_host = config.get('elasticsearcg.host');
+const es_host = config.get('elasticsearch.host');
 const es_port = config.get('elasticsearch.port');
 const esclient = new elasticsearch.Client({
     host: `http://${es_host}:${es_port}`,
