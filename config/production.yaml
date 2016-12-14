@@ -1,6 +1,6 @@
 port: 3000
 mongoDatabase: "mongodb://localhost:27017/ubulogNodeDb"
-elastic:
-    host: "127.0.0.1"
+elasticsearch:
+    host: "es"
     port: "9200"
 loggingLevel: "warn"

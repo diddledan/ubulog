@@ -1,20 +1,20 @@
-var http = require('http');
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var config = require('config');
+const http = require('http');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const config = require('config');
 //var mongoose = require('mongoose');
 //mongoose.Promise = require('bluebird');
-var elasticsearch = require('elasticsearch');
+const elasticsearch = require('elasticsearch');
 
-var es_host = config.get('elastic.host');
-var es_port = config.get('elastic.port');
-var esclient = new elasticsearch.Client({
-        host: `http://${es_host}:${es_port}`,
-        log: 'info'
+const es_host = config.get('elasticsearcg.host');
+const es_port = config.get('elasticsearch.port');
+const esclient = new elasticsearch.Client({
+    host: `http://${es_host}:${es_port}`,
+    log: 'info'
 });
 
-var app = express();
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -78,9 +78,9 @@ app.get('/_chart', function(req, res) {
         }
     })
     .then((r) => {
-        var data = [];
-        for (var bucket of r.aggregations.date.buckets) {
-            for (var channel of bucket.channel.buckets) {
+        let data = [];
+        for (let bucket of r.aggregations.date.buckets) {
+            for (let channel of bucket.channel.buckets) {
                 data.push({
                     "x": bucket.key_as_string,
                     "y": channel.doc_count,
@@ -100,7 +100,7 @@ app.get('*', function(req, res) {
 
 app.set('port', config.get('port'));
 
-var server = http.createServer(app);
+const server = http.createServer(app);
 
 server.listen(config.get('port'));
 
