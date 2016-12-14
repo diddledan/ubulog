@@ -1,7 +1,7 @@
 FROM node:argon
 
 RUN mkdir -p /usr/src/app
-WORKDIR /usrs/src/app
+WORKDIR /usr/src/app
 
 RUN npm install -g bower
 RUN npm install -g polymer-cli
