@@ -6,10 +6,12 @@ var config = require('config');
 //var mongoose = require('mongoose');
 //mongoose.Promise = require('bluebird');
 var elasticsearch = require('elasticsearch');
+
+var es_host = config.get('elastic.host');
+var es_port = config.get('elastic.port');
 var esclient = new elasticsearch.Client({
-        host: config.get('elastic.host')
-        , httpAuth: config.get('elastic.auth')
-        // , log: 'trace'
+        host: `http://${es_host}:${es_port}`,
+        log: 'notice'
 });
 
 var app = express();
