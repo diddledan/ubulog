@@ -1,10 +1,9 @@
-FROM node:argon
+FROM diddledan/polymer-base
+
+RUN npm install -g bower
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
-
-RUN npm install -g bower
-RUN npm install -g polymer-cli
 
 COPY package.json /usr/src/app
 RUN npm install
