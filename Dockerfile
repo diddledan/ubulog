@@ -9,7 +9,7 @@ COPY package.json /usr/src/app
 RUN npm install
 
 COPY . /usr/src/app
-RUN bower install
+RUN bower install --allow-root
 
 RUN cd /usr/src/app/src/public && polymer build
 
