@@ -1,0 +1,27 @@
+{
+  "name": "ubulog-node",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "set NODE_ENV=development&& node ./src/app.js",
+    "production": "set NODE_ENV=production&& node ./src/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.4.6",
+    "body-parser": "^1.15.2",
+    "config": "^1.24.0",
+    "elasticsearch": "^12.1.0",
+    "express": "^4.14.0",
+    "js-yaml": "^3.7.0",
+    "mongoose": "^4.7.1"
+  },
+  "devDependencies": {
+    "gulp-livereload": "^3.8.1",
+    "gulp-nodemon": "^2.1.0",
+    "gulp-plumber": "^1.1.0"
+  }
+}

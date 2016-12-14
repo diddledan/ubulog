@@ -1,0 +1,3 @@
+elastic:
+    host: "ELASTIC_HOST"
+    auth: "ELASTIC_AUTH"

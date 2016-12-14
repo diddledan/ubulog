@@ -1,0 +1,133 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="my-chart">
+  <template>
+    <link rel="stylesheet" href="../bower_components/vis/dist/vis.min.css">
+    <style include="shared-styles">
+      :host {
+        display: block;
+
+        padding: 10px;
+      }
+      #legend {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .legend-item {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        width: 100%;
+      }
+      @media screen and (min-width: 680px) {
+        .legend-item {
+          width: 50%;
+        }
+      }
+      @media screen and (min-width: 800px) {
+        .legend-item {
+          width: 33%;
+        }
+      }
+      @media screen and (min-width: 960px) {
+        .legend-item {
+          width: 25%;
+        }
+      }
+      .legend-icon {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+      }
+      .legend-icon svg {
+        width: 16px;
+        height: 16px;
+      }
+      rect.vis-outline {
+        fill: none;
+      }
+    </style>
+
+    <div class="card">
+      <iron-ajax auto url="/_chart" last-response="{{chartData}}"></iron-ajax>
+      <div id="chart"></div>
+
+      <div id="legend">
+        <template is="dom-if" if="[[_haveChart(_chart)]]">
+          <iron-ajax auto url="/_channels" last-response="{{channels}}"></iron-ajax>
+          <template is="dom-repeat" items="[[channels]]">
+            <template is="dom-if" if="[[_haveLegendItem(item)]]">
+              <p class="legend-item"><span class$="[[_getLegendClass(item)]]"></span> <span>[[_getLegendLabel(item)]]</span></p>
+            </template>
+          </template>
+        </template>
+      </div>
+    </div>
+  </template>
+
+  <script src="../bower_components/vis/dist/vis.min.js"></script>
+  <script>
+    Polymer({
+      is: 'my-chart',
+
+      properties: {
+        _chart: {
+          type: Object,
+          value: false
+        }
+      },
+
+      observers: [
+        '_updateChart(chartData)'
+      ],
+
+      _updateChart: function(data) {
+        var dataset = new vis.DataSet(data);
+
+        var options = {
+          defaultGroup: '',
+          drawPoints: false,
+          start: '2005-03-01',
+          legend: false
+        };
+
+        this._chart = new vis.Graph2d(this.$.chart, dataset, options);
+      },
+
+      _haveChart: function(chart) {
+        return !!chart;
+      },
+
+      _haveLegendItem: function(item) {
+        var l = this._chart.getLegend(item);
+        return typeof l === 'object';
+      },
+      _getLegendLabel: function(item) {
+        return this._chart.getLegend(item).label;
+      },
+      _getLegendClass: function(item) {
+        window.requestAnimationFrame(function() {
+          var i = this._chart.getLegend(item).icon;
+          var el = this.$$(`.legend-icon.${item}`);
+          if (!!i) {
+            el.appendChild(i);
+          }
+        }.bind(this));
+        return `legend-icon ${item}`;
+      }
+
+    });
+  </script>
+</dom-module>
