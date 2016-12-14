@@ -11,7 +11,7 @@ var es_host = config.get('elastic.host');
 var es_port = config.get('elastic.port');
 var esclient = new elasticsearch.Client({
         host: `http://${es_host}:${es_port}`,
-        log: 'notice'
+        log: 'info'
 });
 
 var app = express();
