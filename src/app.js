@@ -23,8 +23,10 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
+if (process.env.NODE_ENVIRONMENT === 'production') {
+    app.use(express.static(path.join(__dirname, 'build', 'bundled')));
+}
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'bower_components')));
 
 //mongoose.connect(config.get('mongoDatabase'));
 
@@ -96,7 +98,12 @@ app.get('/_chart', function(req, res) {
 });
 
 app.get('*', function(req, res) {
-    res.sendFile('index.html', { root: 'src/public' });
+    let rootDir = 'src/public';
+    if (process.env.NODE_ENVIRONMENT === 'production') {
+        rootDir = 'src/public/build/bundled';
+    }
+
+    res.sendFile('index.html', {root: rootDir});
 });
 
 

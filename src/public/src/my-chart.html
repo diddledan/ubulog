@@ -120,12 +120,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _getLegendClass: function(item) {
         window.requestAnimationFrame(function() {
           var i = this._chart.getLegend(item).icon;
-          var el = this.$$(`.legend-icon.${item}`);
+          var el = this.$$('.legend-icon.'+item);
           if (!!i) {
             el.appendChild(i);
           }
         }.bind(this));
-        return `legend-icon ${item}`;
+        return 'legend-icon '+item;
       }
 
     });
