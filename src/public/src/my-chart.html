@@ -107,7 +107,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           legend: false
         };
 
-        this._chart = new vis.Graph2d(this.$.chart, dataset, options);
+        if (!!this._chart) {
+            this._chart.setItems(dataset);
+        } else {
+            this._chart = new vis.Graph2d(this.$.chart, dataset, options);
+        }
       },
 
       _haveChart: function(chart) {
