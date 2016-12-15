@@ -23,10 +23,11 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-if (process.env.NODE_ENVIRONMENT === 'production') {
+if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'build', 'bundled')));
+} else {
+    app.use(express.static(path.join(__dirname, 'public')));
 }
-app.use(express.static(path.join(__dirname, 'public')));
 
 //mongoose.connect(config.get('mongoDatabase'));
 
@@ -99,7 +100,7 @@ app.get('/_chart', function(req, res) {
 
 app.get('*', function(req, res) {
     let rootDir = 'src/public';
-    if (process.env.NODE_ENVIRONMENT === 'production') {
+    if (process.env.NODE_ENV === 'production') {
         rootDir = 'src/public/build/bundled';
     }
 
