@@ -18,6 +18,8 @@ const esclient = new elasticsearch.Client({
 
 const app = express();
 
+express.static.mime.define({'application/javascript', 'js'});
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
@@ -52,7 +54,7 @@ app.get('/_channels', function(req, res) {
         r = r.map((v, idx) => v.key);
         r = r.sort();
         res.send(r);
-    }).catch((e) => res.status(500).send(e));
+    }).catch((e) => res.status(500).setHeader("Content-Type", "application/json").send(e));
 });
 
 app.get('/_chart', function(req, res) {
@@ -93,7 +95,7 @@ app.get('/_chart', function(req, res) {
                 });
             }
         }
-        res.send(data);
+        res.setHeader("Content-Type", "application/json").send(data);
     })
     .catch((e) => { console.log(e); res.status(500).send(e) });
 });
