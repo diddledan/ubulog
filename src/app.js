@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 if (process.env.NODE_ENV === 'production') {
-    const bundles = path.join(__dirname, 'build', 'bundled');
+    const bundles = path.join(__dirname, 'public', 'build', 'bundled');
     app.use(express.static(bundles, {'extensions': ['js'], 'setHeaders': (res) => res.setHeader("Content-Type", "application/javascript")}));
     app.use(express.static(bundles));
 } else {
