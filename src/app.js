@@ -52,8 +52,8 @@ app.get('/_channels', function(req, res) {
         r = r.aggregations.channels.buckets;
         r = r.map((v, idx) => v.key);
         r = r.sort();
-        res.send(r);
-    }).catch((e) => res.status(500).setHeader("Content-Type", "application/json").send(e));
+        res.json(r);
+    }).catch((e) => res.status(500).send(e));
 });
 
 app.get('/_chart', function(req, res) {
@@ -94,7 +94,7 @@ app.get('/_chart', function(req, res) {
                 });
             }
         }
-        res.setHeader("Content-Type", "application/json").send(data);
+        res.json(data);
     })
     .catch((e) => { console.log(e); res.status(500).send(e) });
 });
