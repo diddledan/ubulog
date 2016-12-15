@@ -18,15 +18,15 @@ const esclient = new elasticsearch.Client({
 
 const app = express();
 
-express.static.mime.define({'application/javascript': ['js']});
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'build', 'bundled')));
+    const bundles = path.join(__dirname, 'build', 'bundled');
+    app.use(express.static(bundles, {'extensions': ['js'], 'setHeaders': (res) => res.setHeader("Content-Type", "application/javascript")}));
+    app.use(express.static(bundles));
 } else {
     app.use(express.static(path.join(__dirname, 'public')));
 }
