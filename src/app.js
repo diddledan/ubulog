@@ -18,7 +18,7 @@ const esclient = new elasticsearch.Client({
 
 const app = express();
 
-express.static.mime.define({'application/javascript', 'js'});
+express.static.mime.define({'application/javascript': ['js']});
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
