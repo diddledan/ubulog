@@ -99,7 +99,7 @@ app.get('/_chart', function(req, res) {
     .catch((e) => { console.log(e); res.status(500).send(e) });
 });
 
-app.get('*', function(req, res) {
+app.get('/', function(req, res) {
     let rootDir = 'src/public';
     if (process.env.NODE_ENV === 'production') {
         rootDir = 'src/public/build/bundled';
