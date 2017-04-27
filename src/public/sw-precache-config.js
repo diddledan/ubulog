@@ -13,5 +13,8 @@ module.exports = {
     '/manifest.json',
     '/bower_components/webcomponentsjs/webcomponents-lite.min.js'
   ],
+  runtimeCaching: [
+    { urlPattern: /^https:\/\/ubulog.com\/api\/.+$/, handler: 'networkFirst' }
+  ],
   navigateFallback: '/index.html'
 };

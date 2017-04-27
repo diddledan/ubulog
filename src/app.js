@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'production') {
 
 //mongoose.connect(config.get('mongoDatabase'));
 
-app.get('/_channels', function(req, res) {
+app.get('/api/channels', function(req, res) {
     esclient.search({
         body: {
             "size": 0,
@@ -56,7 +56,7 @@ app.get('/_channels', function(req, res) {
     }).catch((e) => res.status(500).send(e));
 });
 
-app.get('/_chart', function(req, res) {
+app.get('/api/chart', function(req, res) {
     esclient.search({
         body: {
             "aggs": {

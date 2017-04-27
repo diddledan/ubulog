@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-ajax auto url="/_channels" last-response="{{channels}}"></iron-ajax>
+    <iron-ajax auto url="/api/channels" last-response="{{channels}}"></iron-ajax>
     <iron-localstorage name="all-channel-names" value="{{channels}}"></iron-localstorage>
 
     <app-location route="{{route}}"></app-location>
