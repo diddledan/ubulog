@@ -8,13 +8,13 @@
  * subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
  */
 module.exports = {
+  runtimeCaching: [
+    { urlPattern: /^https:\/\/ubulog.com\/api\/.+$/, handler: 'networkFirst' }
+  ],
   staticFileGlobs: [
     '/index.html',
     '/manifest.json',
     '/bower_components/webcomponentsjs/webcomponents-lite.min.js'
-  ],
-  runtimeCaching: [
-    { urlPattern: /^https:\/\/ubulog.com\/api\/.+$/, handler: 'networkFirst' }
   ],
   navigateFallback: '/index.html'
 };
