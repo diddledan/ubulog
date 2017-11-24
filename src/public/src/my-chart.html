@@ -8,7 +8,7 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="shared-styles.html">
@@ -83,28 +83,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script src="../bower_components/vis/dist/vis.min.js"></script>
   <script>
-    Polymer({
-      is: 'my-chart',
+    class MyChart extends Polymer.Element {
+      static get is() { return 'my-chart'; }
 
-      properties: {
-        _chart: {
-          type: Object,
-          value: false
-        }
-      },
+      static get properties() {
+				return {
+					_chart: {
+						type: Object,
+						value: false,
+					},
+				};
+			}
 
-      observers: [
-        '_updateChart(chartData)'
-      ],
+      static get observers() {
+				return [
+					'_updateChart(chartData)',
+				];
+			}
 
-      _updateChart: function(data) {
-        var dataset = new vis.DataSet(data);
+      _updateChart(data) {
+        const dataset = new vis.DataSet(data);
 
-        var options = {
+        const options = {
           defaultGroup: '',
           drawPoints: false,
           start: '2004-01-01',
-          legend: false
+          legend: false,
         };
 
         if (!!this._chart) {
@@ -112,29 +116,33 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         } else {
             this._chart = new vis.Graph2d(this.$.chart, dataset, options);
         }
-      },
+      }
 
-      _haveChart: function(chart) {
+      _haveChart(chart) {
         return !!chart;
-      },
+      }
 
-      _haveLegendItem: function(item) {
-        var l = this._chart.getLegend(item);
+      _haveLegendItem(item) {
+        const l = this._chart.getLegend(item);
         return typeof l === 'object';
-      },
-      _getLegendLabel: function(item) {
+			}
+
+      _getLegendLabel(item) {
         return this._chart.getLegend(item).label;
-      },
-      _getLegendClass: function(item) {
+			}
+
+      _getLegendClass(item) {
         window.requestAnimationFrame(function() {
-          var i = this._chart.getLegend(item).icon;
-          var el = this.$$('.legend-icon.'+item);
+          const i = this._chart.getLegend(item).icon;
+          const el = this.$$(`.legend-icon.${item}`);
           if (!!i) {
             el.appendChild(i);
           }
         }.bind(this));
-        return 'legend-icon '+item;
+        return `legend-icon ${item}`;
       }
-    });
+		}
+
+		Window.customElements.define(MyChart.is, MyChart);
   </script>
 </dom-module>

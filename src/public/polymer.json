@@ -7,42 +7,18 @@
   ],
   "sources": [
    "src/**/*",
-   "images/**/*"
+	 "images/**/*"
   ],
   "extraDependencies": [
     "manifest.json",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ],
+  "lint": {
+    "rules": ["polymer-2"]
+  },
   "builds": [
-    {
-      "name": "default",
-      "addServiceWorker": true,
-      "insertPrefetchLinks": true,
-      "bundle": false,
-      "html": {
-        "minify": true
-      },
-      "css": {
-        "minify": true
-      },
-      "js": {
-        "minify": true
-      }
-    },
-    {
-      "name": "bundled",
-      "addServiceWorker": false,
-      "insertPrefetchLinks": false,
-      "bundle": true,
-      "html": {
-        "minify": true
-      },
-      "css": {
-        "minify": true
-      },
-      "js": {
-        "minify": true
-      }
-    }
+		{ "preset": "es5-bundled" },
+		{ "preset": "es6-bundled" },
+    { "preset": "es6-unbundled" }
   ]
 }

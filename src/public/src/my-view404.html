@@ -8,24 +8,31 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 
 <dom-module id="my-view404">
   <template>
     <style>
       :host {
         display: block;
-
         padding: 10px 20px;
       }
     </style>
 
-    Oops, we haven't written that page yet. <a href="/">Head back to home.</a>
+    Oops you hit a 404, we haven't written this page yet. <a href="[[rootPath]]">Head back to home.</a>
   </template>
 
   <script>
-    Polymer({
-      is: 'my-view404'
-    });
+    class MyView404 extends Polymer.Element {
+      static get is() { return 'my-view404'; }
+      static get properties() {
+        return {
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String,
+        };
+      }
+    }
+    window.customElements.define(MyView404.is, MyView404);
   </script>
 </dom-module>

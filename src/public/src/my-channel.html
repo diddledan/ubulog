@@ -8,10 +8,10 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="shared-styles.html">
 
-<dom-module id="my-view2">
+<dom-module id="my-channel">
   <template>
     <style include="shared-styles">
       :host {
@@ -32,18 +32,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-    Polymer({
-      is: 'my-view2',
+    class MyChannel extends Polymer.Element {
+      static get is() { return 'my-channel'; }
 
-      properties: {
-        channel: {
-          type: String
-        }
-      },
+      static get properties() {
+				return {
+					channel: {
+						type: String,
+					},
+					rootPath: String,
+				};
+			}
 
-      _graphUrl: function(channel) {
-        return '/api/graph/' + channel;
+      _graphUrl(channel) {
+        return `${this.rootPath}api/graph/${channel}`;
       }
-    });
+		}
+
+		window.customElements.define(MyChannel.is, MyChannel);
   </script>
 </dom-module>
