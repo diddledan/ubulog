@@ -1,22 +1,21 @@
-'use strict';
-
-const http = require('http');
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const config = require('config');
+import * as http from 'http';
+import * as path from 'path';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as config from 'config';
 //var mongoose = require('mongoose');
 //mongoose.Promise = require('bluebird');
-const elasticsearch = require('elasticsearch');
+import { Client as esClient } from 'elasticsearch';
+import { SearchResponse } from 'elasticsearch';
 
-const es_host = config.get('elasticsearch.host');
-const es_port = config.get('elasticsearch.port');
-const esclient = new elasticsearch.Client({
+const es_host: string = config.get('elasticsearch.host');
+const es_port: number = config.get('elasticsearch.port');
+const es: esClient = new esClient({
     host: `http://${es_host}:${es_port}`,
     log: 'info'
 });
 
-const app = express();
+const app: express.Express = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -24,7 +23,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 if (process.env.NODE_ENV === 'production') {
-    const bundles = path.join(__dirname, 'public', 'build', 'default');
+    const bundles: string = path.join(__dirname, 'public', 'build', 'es6-bundled');
     app.use(express.static(bundles));
 } else {
     app.use(express.static(path.join(__dirname, 'public')));
@@ -32,8 +31,8 @@ if (process.env.NODE_ENV === 'production') {
 
 //mongoose.connect(config.get('mongoDatabase'));
 
-app.get('/api/channels', function(req, res) {
-    esclient.search({
+app.get('/api/channels', (req: express.Request, res: express.Response) => {
+    es.search({
         body: {
             "size": 0,
             "aggs": {
@@ -48,16 +47,17 @@ app.get('/api/channels', function(req, res) {
                 }
             }
         }
-    }).then((r) => {
-        r = r.aggregations.channels.buckets;
-        r = r.map((v, idx) => v.key);
-        r = r.sort();
-        res.json(r);
-    }).catch((e) => res.status(500).send(e));
+    }).then((r: SearchResponse<{}>) => {
+        res.json(
+            r.aggregations.channels.buckets
+            .map((v, idx) => v.key)
+            .sort()
+        );
+    }).catch(e => res.status(500).send(e));
 });
 
-app.get('/api/chart', function(req, res) {
-    esclient.search({
+app.get('/api/chart', (req: express.Request, res: express.Response) => {
+    es.search({
         body: {
             "aggs": {
                 "date": {
@@ -83,26 +83,26 @@ app.get('/api/chart', function(req, res) {
             }
         }
     })
-    .then((r) => {
-        let data = [];
-        for (let bucket of r.aggregations.date.buckets) {
-            for (let channel of bucket.channel.buckets) {
+    .then((r: SearchResponse<{}>) => {
+        const data = [];
+        r.aggregations.date.buckets.forEach(bucket => {
+            bucket.channel.buckets.forEach(channel => {
                 data.push({
                     "x": bucket.key_as_string,
                     "y": channel.doc_count,
                     "group": channel.key
                 });
-            }
-        }
+            });
+        });
         res.json(data);
     })
     .catch((e) => { console.log(e); res.status(500).send(e) });
 });
 
-app.get('/', function(req, res) {
+app.get('/', (req: express.Request, res: express.Response) => {
     let rootDir = 'src/public';
     if (process.env.NODE_ENV === 'production') {
-        rootDir = 'src/public/build/bundled';
+        rootDir = 'src/public/build/es6-bundled';
     }
 
     res.sendFile('index.html', {root: rootDir});
@@ -111,14 +111,10 @@ app.get('/', function(req, res) {
 
 app.set('port', config.get('port'));
 
-const server = http.createServer(app);
+const server: http.Server = http.createServer(app);
 
 server.listen(config.get('port'));
 
-server.on('error', function(error) {
-    console.error(error);
-});
+server.on('error', (error: Error) => console.error(error));
 
-server.on('listening', function() {
-    console.log('listening');
-});
+server.on('listening', () => console.log('listening'));
