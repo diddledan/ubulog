@@ -3,7 +3,7 @@ RUN apk update && apk add git
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 COPY . /usr/src/app
-RUN npm install -g bower && 
+RUN npm install -g bower && \
 	npm install -g typescript && \
 	npm install && \
 	cd src/public && \
