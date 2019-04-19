@@ -63,13 +63,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
 
     <div class="card">
-      <iron-ajax auto url="/_chart" last-response="{{chartData}}"></iron-ajax>
+      <iron-ajax auto url="/_chart" on-response="_handleChartAjax" handle-as="json"></iron-ajax>
       <iron-localstorage name="all-channels-chart-data" value="{{chartData}}"></iron-localstorage>
       <div id="chart"></div>
 
       <div id="legend">
         <template is="dom-if" if="[[_haveChart(_chart)]]">
-          <iron-ajax auto url="/_channels" last-response="{{channels}}"></iron-ajax>
           <iron-localstorage name="all-channel-names" value="{{channels}}"></iron-localstorage>
           <template is="dom-repeat" items="[[channels]]">
             <template is="dom-if" if="[[_haveLegendItem(item)]]">
@@ -134,6 +133,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           }
         }.bind(this));
         return 'legend-icon '+item;
+      },
+      _handleChartAjax: function(ev, request) {
+        if (request.succeeded()) {
+          this.chartData = request.response;
+        }
+      },
+      _handleChannelsAjax: function(ev, request) {
+        if (request.succeeded()) {
+          this.channels = request.response;
+        }
       }
     });
   </script>

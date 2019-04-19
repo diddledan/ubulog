@@ -1,0 +1,44 @@
+version: '2'
+services:
+  elasticsearch:
+    command: 'elasticsearch -Ecluster.name=elasticsearch -Ediscovery.zen.ping.unicast.hosts=elasticsearch-1:9300,elasticsearch-2:9300'
+    expose:
+      - '9200'
+      - '9300'
+    image: 'elasticsearch:latest'
+    volumes:
+      - /usr/share/elasticsearch/data
+  # kibana:
+  #   autoredeploy: true
+  #   image: 'kibana:latest'
+  #   depends_on:
+  #     - elasticsearch
+  #   links:
+  #     - elasticsearch
+  #   ports:
+  #     - '5601:5601'
+  #   restart: always
+  logstash:
+    image: 'diddledan/ubuntu-chatlog-logstash:latest'
+    depends_on:
+      - 'elasticsearch'
+    links:
+      - 'elasticsearch:es'
+    volumes:
+      - /var/lib/ubuntu-chatlogs
+  ubuntu-logs:
+    image: 'diddledan/ubuntu-chatlog-mirror:latest'
+    restart: always
+    volumes_from:
+      - logstash
+  ubuntu-logs-web:
+    environment:
+      - VIRTUAL_HOST=ubulog.com
+      - VIRTUAL_PORT=3000
+    build: '.'
+    depends_on:
+      - 'elasticsearch'
+    links:
+      - 'elasticsearch:es'
+    ports:
+      - '3000:3000'

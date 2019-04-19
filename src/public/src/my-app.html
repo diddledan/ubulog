@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
-    <iron-ajax auto url="/_channels" last-response="{{channels}}"></iron-ajax>
+    <iron-ajax auto url="/_channels" on-response="_handleChannelsAjax" handle-as="json"></iron-ajax>
     <iron-localstorage name="all-channel-names" value="{{channels}}"></iron-localstorage>
 
     <app-location route="{{route}}"></app-location>
@@ -149,6 +149,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _getChannelUrl: function(channel) {
         return '/channel/' + channel;
+      },
+
+      _handleChannelsAjax: function(ev, request) {
+        if (request.succeeded()) {
+          this.channels = request.response;
+        }
       }
     });
   </script>
